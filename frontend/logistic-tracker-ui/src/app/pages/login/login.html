@@ -1,0 +1,44 @@
+<div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+  <!-- LEFT SIDE: Branding -->
+  <div class="bg-blue-900 text-white flex items-center justify-center p-10">
+    <div class="max-w-md">
+      <i class="fa-solid fa-truck-fast text-7xl mb-6"></i>
+
+      <h1 class="text-4xl font-bold mb-4">Logistic Tracker</h1>
+
+      <p class="text-lg opacity-80 leading-relaxed">
+        A modern logistics management tool for tracking loads, monitoring shipment
+        stages, and managing drivers with ease.
+      </p>
+    </div>
+  </div>
+
+  <!-- RIGHT SIDE: Login Form -->
+  <div class="flex items-center justify-center p-10 bg-gray-50">
+    <div class="w-full max-w-md bg-white shadow-xl rounded-xl p-8">
+      <h2 class="text-2xl font-semibold mb-6 text-gray-700">Login</h2>
+
+      <!-- EMAIL -->
+      <mat-form-field class="w-full mb-4" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [(ngModel)]="email">
+      </mat-form-field>
+
+      <!-- PASSWORD -->
+      <mat-form-field class="w-full mb-6" appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" [(ngModel)]="password">
+      </mat-form-field>
+
+      <!-- LOGIN BUTTON -->
+      <button
+        mat-raised-button
+        color="primary"
+        class="w-full py-2"
+        (click)="onLogin()"
+      >
+        Login
+      </button>
+    </div>
+  </div>
+</div>
