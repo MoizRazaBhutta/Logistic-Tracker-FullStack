@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,7 +18,7 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -23,15 +29,25 @@ import { Router } from '@angular/router';
   styleUrl: './login.scss',
 })
 export class Login {
-  email: string = '';
-  password: string = '';
+  loginForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+    ]),
+  });
 
   router: Router = inject(Router);
 
   onLogin() {
-    // Implement login logic here
-    console.log('Logging in with', this.email, this.password);
-    // For example, navigate to the dashboard after login
-    // this.router.navigate(['/dashboard']);
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+
+    const { email, password } = this.loginForm.value;
+    console.log('Login successful', email, password);
+    // Navigate to dashboard or another page upon successful login
+    this.router.navigate(['/dashboard']);
   }
 }

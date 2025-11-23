@@ -1,22 +1,47 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
+/* -----------------------------
+   1) Angular Material Theme
+------------------------------ */
 html {
-  @include mat.theme((
-    color: (
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    density: 0
-  ));
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      density: 0,
+    )
+  );
+
+  --md-sys-color-primary: #1e3a8a; /* Tailwind blue-900 */
+  --md-sys-color-primary-container: #1e3a8a;
+  --md-sys-color-on-primary: #ffffff;
 }
 
+/* -----------------------------
+   2) Global styles
+------------------------------ */
 body {
+  font-family: "Inter", sans-serif !important;
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
-  font-family: var(--mat-sys-body-medium);
   margin: 0;
 }
 
-html, body {
+html,
+body {
   height: 100%;
+}
+
+/* -----------------------------
+   3) Fix Raised Button Override
+------------------------------ */
+
+.mat-mdc-raised-button:not(.mat-mdc-button-disabled) {
+  background-color: #1e3a8a !important; /* blue-900 */
+  color: #fff !important;
+}
+.mat-mdc-raised-button:not(.mat-mdc-button-disabled):hover {
+  background-color: #172f6a !important;
 }
