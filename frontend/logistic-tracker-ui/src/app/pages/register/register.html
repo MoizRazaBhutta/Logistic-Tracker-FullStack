@@ -1,0 +1,86 @@
+<div class="w-full max-w-md bg-white shadow-xl rounded-xl p-8 mx-auto">
+  <h2 class="text-2xl font-semibold mb-6 text-gray-700">Register</h2>
+
+  <form [formGroup]="registerForm">
+    <!-- FULL NAME -->
+    <mat-form-field class="w-full mb-4" appearance="outline">
+      <mat-label>Full Name</mat-label>
+      <input matInput formControlName="fullName" />
+
+      @if (registerForm.controls['fullName'].hasError('required')) {
+      <mat-error class="text-xs leading-tight text-red-600">
+        Full name is required
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- EMAIL -->
+    <mat-form-field class="w-full mb-4" appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" />
+
+      @if (registerForm.controls['email'].hasError('required')) {
+      <mat-error class="text-xs leading-tight text-red-600">
+        Email is required
+      </mat-error>
+      } @if (registerForm.controls['email'].hasError('email')) {
+      <mat-error class="text-xs leading-tight text-red-600">
+        Enter a valid email address
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- PASSWORD -->
+    <mat-form-field class="w-full mb-4" appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password" />
+
+      @if (registerForm.controls['password'].hasError('required')) {
+      <mat-error class="text-xs leading-tight text-red-600">
+        Password is required
+      </mat-error>
+      } @if (registerForm.controls['password'].hasError('minlength')) {
+      <mat-error class="text-xs leading-tight text-red-600">
+        Password must be at least 6 characters
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- CONFIRM PASSWORD -->
+    <mat-form-field class="w-full mb-6" appearance="outline">
+      <mat-label>Confirm Password</mat-label>
+      <input matInput type="password" formControlName="confirmPassword" />
+
+      @if (registerForm.controls['confirmPassword'].hasError('required')) {
+      <mat-error class="text-xs leading-tight text-red-600">
+        Confirm your password
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- FORM-LEVEL PASSWORD MISMATCH ERROR -->
+    @if (registerForm.hasError('passwordMismatch') &&
+    registerForm.controls['confirmPassword'].touched) {
+    <div class="text-xs text-red-600 mt-1 ml-1">Passwords do not match</div>
+    }
+
+    <!-- REGISTER BUTTON -->
+    <button
+      mat-raised-button
+      color="primary"
+      class="w-full py-2"
+      (click)="onRegister()"
+      [disabled]="registerForm.invalid"
+    >
+      Register
+    </button>
+
+    <!-- LOGIN LINK -->
+    <p class="text-center mt-4 text-sm text-gray-600">
+      Already a member?
+      <a routerLink="/auth/login" class="text-blue-700 underline font-medium">
+        Login here
+      </a>
+    </p>
+  </form>
+</div>
