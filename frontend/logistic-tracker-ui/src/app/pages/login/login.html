@@ -1,62 +1,66 @@
-<div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
-  <!-- LEFT SIDE Branding -->
-  <div class="bg-blue-900 text-white flex items-center justify-center p-10">
-    <div class="max-w-md">
-      <i class="fa-solid fa-truck-fast text-7xl mb-6"></i>
-      <h1 class="text-4xl font-bold mb-4">Logistic Tracker</h1>
-      <p class="text-lg opacity-80 leading-relaxed">
-        Track your shipments, manage loads, and monitor driver activity.
-      </p>
-    </div>
-  </div>
+<div class="w-full max-w-md bg-white shadow-xl rounded-xl p-8 mx-auto">
+  <h2 class="text-2xl font-semibold mb-6 text-gray-700">Login</h2>
 
-  <!-- RIGHT SIDE Login -->
-  <div class="flex items-center justify-center p-10 bg-gray-50">
-    <div class="w-full max-w-md bg-white shadow-xl rounded-xl p-8">
-      <h2 class="text-2xl font-semibold mb-6 text-gray-700">Login</h2>
+  <form [formGroup]="loginForm">
+    <!-- EMAIL -->
+    <mat-form-field class="w-full mb-4" appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" />
 
-      <form [formGroup]="loginForm">
-        <!-- EMAIL -->
-        <mat-form-field class="w-full mb-4" appearance="outline">
-          <mat-label>Email</mat-label>
-          <input matInput formControlName="email" type="email" />
-          @if(loginForm.controls.email.hasError('required')) {
-          <mat-error class="text-xs leading-tight text-red-600">
-            Email is required
-          </mat-error>
-          } @if(loginForm.controls.email.hasError('email')) {
-          <mat-error class="text-xs leading-tight text-red-600">
-            Enter a valid email address
-          </mat-error>
-          }
-        </mat-form-field>
+      @if (loginForm.controls.email.hasError('required')) {
+      <mat-error class="text-xs leading-tight text-red-600">
+        Email is required
+      </mat-error>
+      } @if (loginForm.controls.email.hasError('email')) {
+      <mat-error class="text-xs leading-tight text-red-600">
+        Enter a valid email address
+      </mat-error>
+      }
+    </mat-form-field>
 
-        <!-- PASSWORD -->
-        <mat-form-field class="w-full mb-6" appearance="outline">
-          <mat-label>Password</mat-label>
-          <input matInput formControlName="password" type="password" />
+    <!-- PASSWORD -->
+    <mat-form-field class="w-full mb-6" appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" type="password" />
 
-          @if(loginForm.controls.password.hasError('required')) {
-          <mat-error class="text-xs leading-tight text-red-600">
-            Password is required
-          </mat-error>
-          } @if(loginForm.controls.password.hasError('minlength')) {
-          <mat-error class="text-xs leading-tight text-red-600">
-            Password must be at least 6 characters
-          </mat-error>
-          }
-        </mat-form-field>
+      @if (loginForm.controls.password.hasError('required')) {
+      <mat-error class="text-xs leading-tight text-red-600">
+        Password is required
+      </mat-error>
+      } @if (loginForm.controls.password.hasError('minlength')) {
+      <mat-error class="text-xs leading-tight text-red-600">
+        Password must be at least 6 characters
+      </mat-error>
+      }
+    </mat-form-field>
 
-        <button
-          mat-raised-button
-          color="primary"
-          class="w-full py-2"
-          (click)="onLogin()"
-          [disabled]="loginForm.invalid"
-        >
-          Login
-        </button>
-      </form>
-    </div>
-  </div>
+    <!-- LOGIN BUTTON -->
+    <button
+      mat-raised-button
+      color="primary"
+      class="w-full py-2"
+      (click)="onLogin()"
+      [disabled]="loginForm.invalid"
+    >
+      Login
+    </button>
+
+    <!-- Forgot Password -->
+    <p class="text-center mt-4 text-sm">
+      <a routerLink="/auth/forgot" class="text-blue-700 underline">
+        Forgot password?
+      </a>
+    </p>
+
+    <!-- Register -->
+    <p class="text-center mt-2 text-sm text-gray-600">
+      Not a member yet?
+      <a
+        routerLink="/auth/register"
+        class="text-blue-700 underline font-medium"
+      >
+        Register here
+      </a>
+    </p>
+  </form>
 </div>

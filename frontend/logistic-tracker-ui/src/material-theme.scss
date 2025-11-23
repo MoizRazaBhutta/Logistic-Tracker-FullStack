@@ -45,3 +45,8 @@ body {
 .mat-mdc-raised-button:not(.mat-mdc-button-disabled):hover {
   background-color: #172f6a !important;
 }
+.mat-mdc-raised-button.mat-mdc-button-disabled,
+button.mat-mdc-raised-button:disabled {
+  cursor: not-allowed !important;
+  pointer-events: auto !important; // ensures cursor shows
+}
