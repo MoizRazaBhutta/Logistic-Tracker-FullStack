@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { generateRefreshToken } = require("../utils/authUtils");
 
 async function register(req, res) {
   try {
@@ -101,11 +102,18 @@ async function login(req, res) {
       { expiresIn: "1h" } // options
     );
 
+    // Add Refresh Token
+    const refreshToken = generateRefreshToken();
+    user.refreshToken = refreshToken;
+    // Store in database upon login
+    await user.save();
+
     // 6️⃣ Success response with token
     return res.status(200).json({
       success: true,
       message: "Login successful",
       token,
+      refreshToken,
       user: {
         id: user._id,
         fullName: user.fullName,
@@ -121,4 +129,42 @@ async function login(req, res) {
   }
 }
 
-module.exports = { register, login };
+async function refreshToken(req, res) {
+  try {
+    // Implementation for refreshing JWT using refresh token
+    const { refreshToken } = req.body;
+    if (!refreshToken) {
+      return res.status(400).json({
+        success: false,
+        message: "Refresh token required",
+      });
+    }
+    // Check if refresh token is valid
+    const user = await User.findOne({ refreshToken });
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid refresh token",
+      });
+    }
+    // Generate new JWT and return it
+    const newToken = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    return res.status(200).json({
+      success: true,
+      message: "Refresh token successful",
+      token: newToken,
+    });
+  } catch (err) {
+    console.error("Refresh token error:", err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Internal server error",
+    });
+  }
+}
+
+module.exports = { register, login, refreshToken };
