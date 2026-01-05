@@ -2,8 +2,7 @@
 frontend/dist/
 
 # Node modules
-frontend/node_modules/
-backend/node_modules/
+node_modules/
 
 # Python virtualenv + cache
 driver-app/venv/
