@@ -196,8 +196,6 @@ async function forgotPassword(req, res) {
   }
 }
 
-const bcrypt = require("bcryptjs");
-
 async function resetPassword(req, res) {
   try {
     const { email, newPassword } = req.body;
@@ -256,4 +254,10 @@ async function resetPassword(req, res) {
   }
 }
 
-module.exports = { register, login, refreshToken, forgotPassword };
+module.exports = {
+  register,
+  login,
+  refreshToken,
+  forgotPassword,
+  resetPassword,
+};
