@@ -12,6 +12,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth';
+import { RegisterUser } from '../../models/user.interface';
 
 @Component({
   selector: 'app-register',
@@ -28,6 +30,7 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class Register {
   router: Router = inject(Router);
+  authService = inject(AuthService);
   registerForm: FormGroup = new FormGroup(
     {
       fullName: new FormControl('', [Validators.required]),
@@ -56,6 +59,21 @@ export class Register {
     if (this.registerForm.valid) {
       console.log('User:', this.registerForm.value);
       // Navigate or send to backend
+      const userData: RegisterUser = {
+        fullName: this.registerForm.value.fullName,
+        email: this.registerForm.value.email,
+        password: this.registerForm.value.password,
+      };
+      this.authService.register(userData).subscribe({
+        next: (res) => {
+          console.log('Registration successful', res);
+          // optional: navigate to login
+          this.router.navigate(['/auth/login']);
+        },
+        error: (err) => {
+          console.error('Registration failed', err);
+        },
+      });
     }
   }
 }
