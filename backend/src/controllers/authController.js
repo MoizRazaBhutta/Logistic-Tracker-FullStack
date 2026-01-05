@@ -167,4 +167,93 @@ async function refreshToken(req, res) {
   }
 }
 
-module.exports = { register, login, refreshToken };
+async function forgotPassword(req, res) {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required",
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    // IMPORTANT:
+    // We return success true in both cases
+    // but include exists flag for frontend logic
+    return res.status(200).json({
+      success: true,
+      exists: !!user,
+    });
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+}
+
+const bcrypt = require("bcryptjs");
+
+async function resetPassword(req, res) {
+  try {
+    const { email, newPassword } = req.body;
+
+    if (!email || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and new password are required",
+      });
+    }
+
+    // Optional: enforce minimum password length
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 6 characters long",
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Compare the old password of this user to prevent reusing the same password
+    const isPasswordValid = await bcrypt.compare(
+      newPassword,
+      user.passwordHash
+    );
+    if (isPasswordValid) {
+      return res.status(400).json({
+        success: false,
+        message: "New password cannot be the same as the old password",
+      });
+    }
+
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+
+    user.passwordHash = passwordHash;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Password reset successfully",
+    });
+  } catch (error) {
+    console.error("Reset password error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+}
+
+module.exports = { register, login, refreshToken, forgotPassword };
