@@ -13,6 +13,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth';
+import { LoginResponse, LoginUser } from '../../models/user.interface';
 
 @Component({
   selector: 'app-login',
@@ -38,17 +40,44 @@ export class Login {
     ]),
   });
 
+  loginErrorMessage: string | null = null;
+
   router: Router = inject(Router);
+  authService = inject(AuthService);
 
   onLogin() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
+    this.loginErrorMessage = null; // Reset previous error message
+    const userData: LoginUser = {
+      email: this.loginForm.value.email!,
+      password: this.loginForm.value.password!,
+    };
+    this.authService.login(userData).subscribe({
+      next: (response: LoginResponse) => {
+        console.log('Login successful', response);
+        // Store tokens in local storage
+        this.authService.setAccessToken(response.token);
+        this.authService.setRefreshToken(response.refreshToken);
 
-    const { email, password } = this.loginForm.value;
-    console.log('Login successful', email, password);
-    // Navigate to dashboard or another page upon successful login
-    this.router.navigate(['/dashboard']);
+        // Navigate to dashboard or home page
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err: any) => {
+        // 🔥 THIS IS THE IMPORTANT PART
+        if (err.status === 401) {
+          this.loginErrorMessage =
+            err.error?.message || 'Invalid email or password';
+        } else {
+          this.loginErrorMessage =
+            'Something went wrong. Please try again later.';
+        }
+
+        // optional: clear password field
+        this.loginForm.controls.password.reset();
+      },
+    });
   }
 }

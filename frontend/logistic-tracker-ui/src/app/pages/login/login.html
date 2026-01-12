@@ -1,5 +1,11 @@
 <div class="w-full max-w-md bg-white shadow-xl rounded-xl p-8 mx-auto">
   <h2 class="text-2xl font-semibold mb-6 text-gray-700">Login</h2>
+  <!-- 🔴 BACKEND LOGIN ERROR (401 etc.) -->
+  @if (loginErrorMessage) {
+  <div class="bg-red-100 text-red-700 text-sm p-3 rounded mb-4">
+    {{ loginErrorMessage }}
+  </div>
+  }
 
   <form [formGroup]="loginForm">
     <!-- EMAIL -->

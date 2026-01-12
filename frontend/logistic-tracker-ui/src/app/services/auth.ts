@@ -1,6 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { RegisterUser } from '../models/user.interface';
+import {
+  LoginResponse,
+  LoginUser,
+  RegisterUser,
+} from '../models/user.interface';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,5 +17,24 @@ export class AuthService {
   register(payload: RegisterUser) {
     console.log('Base URL:', this.baseUrl);
     return this.http.post(`${this.baseUrl}/register`, payload);
+  }
+  login(payload: LoginUser): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload);
+  }
+
+  getAccessToken(): string | null {
+    return localStorage.getItem('accessToken');
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem('refreshToken');
+  }
+
+  setAccessToken(token: string): void {
+    localStorage.setItem('accessToken', token);
+  }
+
+  setRefreshToken(token: string): void {
+    localStorage.setItem('refreshToken', token);
   }
 }

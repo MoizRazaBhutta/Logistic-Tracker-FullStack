@@ -4,6 +4,7 @@ import { Auth } from './layout/auth/auth';
 import { Register } from './pages/register/register';
 import { Forgot } from './pages/forgot/forgot';
 import { ResetPassword } from './pages/reset-password/reset-password';
+import { Dashboard } from './pages/dashboard/dashboard';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,10 @@ export const routes: Routes = [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
     ],
   },
-
+  // TBD Add auth guard here later
+  {
+    path: 'dashboard',
+    component: Dashboard,
+  },
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
 ];
