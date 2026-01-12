@@ -1,6 +1,10 @@
 <div class="w-full max-w-md bg-white shadow-xl rounded-xl p-8 mx-auto">
   <h2 class="text-2xl font-semibold mb-6 text-gray-700">Forgot Password</h2>
-
+  @if (forgotErrorMessage) {
+  <div class="bg-red-100 text-red-700 text-sm p-3 rounded mb-4">
+    {{ forgotErrorMessage }}
+  </div>
+  }
   <!-- Success Message -->
   @if(showSuccess) {
   <div class="bg-green-100 text-green-700 text-sm p-3 rounded mb-4">

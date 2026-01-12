@@ -12,6 +12,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth';
+import {
+  ResetPasswordRequest,
+  ResetPasswordResponse,
+} from '../../models/user.interface';
 
 @Component({
   selector: 'app-reset-password',
@@ -28,9 +33,10 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './reset-password.scss',
 })
 export class ResetPassword {
-  showSuccess = false;
   router: Router = inject(Router);
-
+  resetSuccessMessage: string | null = null;
+  resetErrorMessage: string | null = null;
+  authService = inject(AuthService);
   resetForm = new FormGroup(
     {
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -53,15 +59,32 @@ export class ResetPassword {
   }
 
   onReset() {
-    if (this.resetForm.valid) {
-      this.showSuccess = true;
-
-      setTimeout(() => {
-        this.router.navigate(['/auth/login']);
-      }, 5000);
-
-      // Later: Call backend for actual password reset
-      // this.authService.resetPassword(token, this.resetForm.value)
+    if (this.resetForm.invalid) {
+      this.resetForm.markAllAsTouched();
+      return;
     }
+
+    this.resetErrorMessage = null;
+    this.resetSuccessMessage = null;
+
+    const payload: ResetPasswordRequest = {
+      email: this.resetForm.value.email as string,
+      newPassword: this.resetForm.value.password as string,
+    };
+
+    this.authService.resetPassword(payload).subscribe({
+      next: (res: ResetPasswordResponse) => {
+        this.resetSuccessMessage = res.message;
+
+        // optional redirect to login
+        setTimeout(() => {
+          this.router.navigate(['/auth/login']);
+        }, 2000);
+      },
+      error: (err) => {
+        this.resetErrorMessage =
+          err.error?.message || 'Failed to reset password';
+      },
+    });
   }
 }

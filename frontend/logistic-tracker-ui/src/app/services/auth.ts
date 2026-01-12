@@ -1,9 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {
+  ForgotPasswordRequest,
+  ForgotPasswordResponse,
   LoginResponse,
   LoginUser,
   RegisterUser,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
 } from '../models/user.interface';
 import { Observable } from 'rxjs';
 
@@ -36,5 +40,23 @@ export class AuthService {
 
   setRefreshToken(token: string): void {
     localStorage.setItem('refreshToken', token);
+  }
+
+  forgotPassword(
+    payload: ForgotPasswordRequest
+  ): Observable<ForgotPasswordResponse> {
+    return this.http.post<ForgotPasswordResponse>(
+      `${this.baseUrl}/forgot-password`,
+      payload
+    );
+  }
+
+  resetPassword(
+    payload: ResetPasswordRequest
+  ): Observable<ResetPasswordResponse> {
+    return this.http.post<ResetPasswordResponse>(
+      `${this.baseUrl}/reset-password`,
+      payload
+    );
   }
 }
