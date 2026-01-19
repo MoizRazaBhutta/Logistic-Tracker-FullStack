@@ -59,4 +59,13 @@ export class AuthService {
       payload
     );
   }
+
+  logout() {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+  }
+
+  isLoggedIn(): boolean {
+    return this.getAccessToken() !== null;
+  }
 }

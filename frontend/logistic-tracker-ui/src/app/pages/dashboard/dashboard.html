@@ -1,1 +1,11 @@
-<p>dashboard works!</p>
+<div class="min-h-screen bg-gray-100 p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-semibold text-gray-700">Dashboard</h1>
+
+    <button mat-button color="warn" (click)="onLogout()">Logout</button>
+  </div>
+
+  <div class="bg-white p-6 rounded shadow">
+    <p class="text-gray-600">Welcome! This is your protected dashboard.</p>
+  </div>
+</div>
